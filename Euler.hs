@@ -1,8 +1,11 @@
 module Euler
 ( factors
+, divisors
 , factorization
-, factors2
+, properDivisors 
 ) where
+
+import Data.List
 
 -- 素因数分解
 -- ex. factorization 90 => [2,3,3,5]
@@ -16,12 +19,18 @@ factorization n  = m : factorization (n `div` m)
 -- ex. factors 10 => [1,2,5,10]
 factors :: Integral a => a -> [a]
 factors n = [x | x <- [1..n], n `mod` x == 0]
-
-factors2 n = 1 : map product combination
+-- alias
+divisors :: Integral a => a -> [a]
+divisors num = sort $ divisors' num [1..num]
   where
-    combination = tail $ subs $ factorization n 
+    divisors' _ [] = []
+    divisors' n (x:xs)
+      | n < x ^ 2       = []
+      | n == x * x    = [x]
+      | n `mod` x == 0  = x : (n `div` x) : divisors' n xs
+      | otherwise       = divisors' n xs
 
-subs :: [a] -> [[a]]
-subs []     = [[]]
-subs (x:xs) = yss ++ map (x:) yss
-  where yss = subs xs
+-- 真の約数
+-- ex properDivisors 10 => [1,2,5]
+properDivisors :: Integral a => a -> [a]
+properDivisors n = filter (/= n) $ divisors n
