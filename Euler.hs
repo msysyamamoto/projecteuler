@@ -17,9 +17,6 @@ factorization n  = m : factorization (n `div` m)
 
 -- 約数
 -- ex. factors 10 => [1,2,5,10]
-factors :: Integral a => a -> [a]
-factors n = [x | x <- [1..n], n `mod` x == 0]
--- alias
 divisors :: Integral a => a -> [a]
 divisors num = sort $ divisors' num [1..num]
   where
@@ -29,6 +26,10 @@ divisors num = sort $ divisors' num [1..num]
       | n == x * x    = [x]
       | n `mod` x == 0  = x : (n `div` x) : divisors' n xs
       | otherwise       = divisors' n xs
+
+-- alias
+factors :: Integral a => a -> [a]
+factors n = divisors n 
 
 -- 真の約数
 -- ex properDivisors 10 => [1,2,5]
