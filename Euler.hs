@@ -3,6 +3,7 @@ module Euler
 , divisors
 , factorization
 , properDivisors 
+, primes
 ) where
 
 import Data.List
@@ -35,3 +36,14 @@ factors n = divisors n
 -- ex properDivisors 10 => [1,2,5]
 properDivisors :: Integral a => a -> [a]
 properDivisors n = filter (/= n) $ divisors n
+
+
+-- 素数のリスト
+primes :: Int -> [Integer]
+primes n = map fromIntegral $ 2 : sieve [3, 5 .. n]
+    where
+      isqrt = (truncate . sqrt . fromIntegral) n
+      sieve (p : xs)
+          | p > isqrt = p : xs
+          | otherwise = p : sieve [x | x <- xs, rem x p /= 0]
+
