@@ -12,5 +12,5 @@ cc :: [Integer] -> Integer -> Integer
 cc [] _ = 0
 cc (d:ds) a
   | a == 0 = 1
-  | a <= 0 = 0
+  | a < 0  = 0
   | otherwise = cc (d:ds) (a - d) + cc ds a
