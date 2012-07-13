@@ -4,6 +4,7 @@ module Euler
 , factorization
 , properDivisors 
 , primes
+, factorial 
 ) where
 
 import Data.List
@@ -47,3 +48,7 @@ primes n = map fromIntegral $ 2 : sieve [3, 5 .. n]
           | p > isqrt = p : xs
           | otherwise = p : sieve [x | x <- xs, rem x p /= 0]
 
+-- 階乗
+-- factorial 5 -> 120
+factorial :: Integral a => a -> a
+factorial n = product [1..n]
