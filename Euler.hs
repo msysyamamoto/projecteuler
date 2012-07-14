@@ -5,6 +5,7 @@ module Euler
 , properDivisors 
 , primes
 , factorial 
+, permutations
 ) where
 
 import Data.List
@@ -52,3 +53,8 @@ primes n = map fromIntegral $ 2 : sieve [3, 5 .. n]
 -- factorial 5 -> 120
 factorial :: Integral a => a -> a
 factorial n = product [1..n]
+
+-- 順列
+permutation :: Eq a => [a] -> [[a]]
+permutation [] = [[]]
+permutation xs = concat [map (x:) $ permutation (delete x xs) | x <- xs]
