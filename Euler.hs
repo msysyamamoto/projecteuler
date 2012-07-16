@@ -5,10 +5,15 @@ module Euler
 , properDivisors 
 , primes
 , factorial 
-, permutations
+, permutation
+, millerRabinTest
+, millerRabin
 ) where
 
 import Data.List
+import System.Random
+import Control.Applicative
+import Control.Monad
 
 -- 素因数分解
 -- ex. factorization 90 => [2,3,3,5]
@@ -58,3 +63,36 @@ factorial n = product [1..n]
 permutation :: Eq a => [a] -> [[a]]
 permutation [] = [[]]
 permutation xs = concat [map (x:) $ permutation (delete x xs) | x <- xs]
+
+
+-- 素数判定: ミラーラビン法
+millerRabinTest :: Int -> Integer -> IO Bool
+millerRabinTest times n = and <$> replicateM times (millerRabinRandom n)
+
+factor2 :: Integer -> (Int, Integer)
+factor2 n = factor2' (0,n)
+  where
+    factor2' (s,d)
+      | even d    = factor2' (s + 1, d `div` 2)
+      | otherwise = (s,d)
+
+millerRabin :: Integer -> Integer -> Bool
+millerRabin n a = 
+  let (s,d) = factor2 (n - 1)
+      aExpD = expmod a d n
+      double x = expmod x 2 n
+      evens = take s $ iterate double aExpD
+  in aExpD == 1 || any (== n - 1) evens
+
+millerRabinRandom :: Integer -> IO Bool
+millerRabinRandom n =  millerRabin n <$> getRandom 2 (n - 2)
+
+expmod :: Integer -> Integer -> Integer -> Integer
+expmod base ex m
+  | ex == 0   = 1
+  | even ex   = square (expmod base (ex `div` 2) m) `mod` m
+  | otherwise = (base * (expmod base (ex - 1) m)) `mod` m
+ where
+   square x = x * x
+
+getRandom n m = getStdRandom $ randomR (n, m)
