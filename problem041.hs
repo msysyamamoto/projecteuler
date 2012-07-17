@@ -11,8 +11,9 @@ subjects :: [Integer]
 subjects = subjects' [9,8..1]
   where
     subjects' []     = [] 
-    subjects' [n]    = (reverse $ sort $ map read $ permutations $ map intToDigit [1..n]) 
-    subjects' (n:ns) = (reverse $ sort $ map read $ permutations $ map intToDigit [1..n]) ++ subjects' ns
+    subjects' [n]    = prems n 
+    subjects' (n:ns) = prems n ++ subjects' ns
+    prems n = reverse $ sort $ map read $ permutations $ map intToDigit [1..n]
 
 isPrime :: Integer -> Bool
 isPrime n = millerRabin n (n - 2)
