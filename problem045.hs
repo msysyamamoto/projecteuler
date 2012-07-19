@@ -1,3 +1,5 @@
+main = print solve
+
 solve :: Integer
 solve = (same hexagonals pentagonals triangles) !! 2 -- [1, 40755, answer ...]
 
