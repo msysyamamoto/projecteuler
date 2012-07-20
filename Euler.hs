@@ -7,6 +7,7 @@ module Euler
 , factorial 
 , permutation
 , millerRabinTest
+, millerRabinRandom 
 , millerRabin
 ) where
 
